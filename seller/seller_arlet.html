@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <h2>Nhận thông báo mua hàng</h2>
+    <ul id="invoice-list">
+        <li>Mã sản phẩm/ Người mua/ Xác nhận</li>
+    </ul>
+    <script>
+        fetch('/invoices')
+            .then(response => response.json())
+            .then(invoices => {
+                const invoiceList = document.getElementById('invoice-list');
+                invoices.forEach(invoice => {
+                    const listItem = document.createElement('li');
+                    const form = document.createElement('form');
+                    
+                    // Tạo input cho product ID
+                    const input_id = document.createElement('input');
+                    input_id.type = "text";
+                    input_id.name = "product_id"
+                    input_id.value = `${invoice.product_id}`; // Sửa productid thành product_id
+                    
+                    // Tạo input cho người mua
+                    const input_buyer = document.createElement('input');
+                    input_buyer.type = "text";
+                    input_buyer.name = "buyername"
+                    input_buyer.value = `${invoice.buyer_name}`;
+                    
+                    // Tạo nút xác nhận
+                    const input_confirm = document.createElement('button');
+                    input_confirm.type = "submit";
+                    input_confirm.textContent = "Xác nhận";
+
+                    const input_id_message = document.createElement('input');
+                    input_id_message.type = "hidden"
+                    input_id_message.name = "message_id"
+                    input_id_message.value = `${invoice.id}`
+                    
+                    // Thêm các phần tử vào form
+                    form.appendChild(input_id);
+                    form.appendChild(input_buyer);
+                    form.appendChild(input_confirm);
+                    form.appendChild(input_id_message);
+                    form.action = "/confirm"
+                    form.method = "POST"
+                    
+                    // Thêm form vào mục danh sách
+                    listItem.appendChild(form);
+                    invoiceList.appendChild(listItem); // Thêm listItem vào danh sách
+                });
+            })
+            .catch(error => {
+                console.error('Lỗi khi tải danh sách hóa đơn: ' + error);
+            });
+    </script>
+    
+</body>
+</html>

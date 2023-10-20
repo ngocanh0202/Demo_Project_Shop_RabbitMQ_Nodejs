@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <style>
+        .container{
+            display: flex;
+            justify-content: center;
+            align-items: center;  
+            height: 100vh;    
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <form id="registrationForm" action="/register" method="post">
+            <input type="text" name="username" placeholder="user name">
+            <br>
+            <input type="text" name="password" placeholder="password">
+            <br>
+            <input type="text" name="repassword" placeholder="repassword">
+            <br>
+            <a href="/login">Đăng nhập</a>
+            <br>
+            <button type="submit">Đăng nhập</button>
+        </form>
+        <div id="message"></div>
+    </div>
+    <script>
+        document.getElementById('registrationForm').addEventListener('submit', function (event) {
+        event.preventDefault(); // Ngăn chặn việc gửi yêu cầu
+
+        const username = document.getElementsByName('username')[0].value;
+        const password = document.getElementsByName('password')[0].value;
+        const repassword = document.getElementsByName('repassword')[0].value;
+
+        const xhr = new XMLHttpRequest();
+
+        xhr.onload = function () {
+            if (xhr.status === 200) {
+                document.getElementById('message').innerHTML = xhr.responseText;
+            }
+        };
+
+        xhr.open('POST', '/register', true);
+        xhr.setRequestHeader('Content-type', 'application/x-www-form-urlencoded');
+        xhr.send(`username=${username}&password=${password}&repassword=${repassword}`);
+    
+    });
+    </script>
+</body>
+</html>

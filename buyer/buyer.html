@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <style>
+        table{
+            text-align: center;
+            border: 1px solid;
+            border-spacing: 0px;
+        }
+        tr{
+            padding: 5px;
+            
+        }
+        td{
+            padding: 5px;
+            border: 1px solid;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h3>Các sản phẩm bán</h3>
+        <table id="product-list">
+            <tr>
+                <td>ID</td>
+                <td>Tên</td>
+                <td>Giá</td>
+                <td>Mua</td>
+            </tr>
+            <script>
+               fetch('/products')
+                .then(response => response.json())
+                .then(products => {
+                    const productList = document.getElementById('product-list');
+                    products.forEach(product => {
+                        const row = document.createElement('tr');
+                        const idCell = document.createElement('td');
+                        idCell.textContent = product.ID;
+                        const nameCell = document.createElement('td');
+                        nameCell.textContent = product.name;
+                        const priceCell = document.createElement('td');
+                        priceCell.textContent = product.price;
+                        const buyCell = document.createElement('td');
+                        const buyForm = document.createElement('form');
+                        buyForm.action = "/buy"
+                        buyForm.method = "POST"
+                        const hiddenInput = document.createElement('input');
+                        hiddenInput.type = 'hidden';
+                        hiddenInput.value = product.ID;
+                        hiddenInput.name = "ID"
+                        const hiddenInput2 = document.createElement('input');
+                        hiddenInput2.type = 'hidden';
+                        hiddenInput2.value = product.username;
+                        hiddenInput2.name = "seller"
+                        const buyButton = document.createElement('button');
+                        buyButton.type = 'submit';
+                        buyButton.textContent = 'Mua';
+                        buyForm.appendChild(hiddenInput);
+                        buyForm.appendChild(hiddenInput2);
+                        buyForm.appendChild(buyButton);
+                        buyCell.appendChild(buyForm);
+                        row.appendChild(idCell);
+                        row.appendChild(nameCell);
+                        row.appendChild(priceCell);
+                        row.appendChild(buyCell);
+                        productList.appendChild(row);
+                    });
+                })
+                .catch(error => {
+                    console.error('Lỗi khi tải sản phẩm: ' + error);
+                });
+            </script>
+        </table>
+    </div>
+</body>
+</html>

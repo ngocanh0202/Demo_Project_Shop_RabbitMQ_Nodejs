@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Trang chủ</title>
+</head>
+<body>
+    <h1>Danh sách sản phẩm</h1>
+    <h3><a href="/add_new_product">Thêm sản phẩm</a></h3>
+    <h3><a href="/RabbitMQ">Các hóa đơn</a></h3>
+    <ul id="product-list"></ul>
+
+    <script>
+        fetch('/products')
+            .then(response => response.json())
+            .then(products => {
+                const productList = document.getElementById('product-list');
+                products.forEach(product => {
+                    const listItem = document.createElement('li');
+                    listItem.textContent = `ID: ${product.ID}, Tên: ${product.name}, Giá: ${product.price}`;
+                    productList.appendChild(listItem);
+                });
+            })
+            .catch(error => {
+                console.error('Lỗi khi tải danh sách sản phẩm: ' + error);
+            });
+    </script>
+</body>
+</html>
